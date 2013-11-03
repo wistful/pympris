@@ -5,27 +5,19 @@
 http://specifications.freedesktop.org/mpris-spec/latest/
 http://specifications.freedesktop.org/mpris-spec/latest/Media_Player.html
 """
-from functools import partial
-
-from common import IROOT, IPROPERTIES
 from common import converter
+from Base import Base
 
-import dbus
 
-
-class Root(object):
+class Root(Base):
 
     """docstring for MediaPlayer"""
 
+    OBJ_PATH = "/org/mpris/MediaPlayer2"
+    IFACE = "org.mpris.MediaPlayer2"
+
     def __init__(self, name, bus=None):
-        super(Root, self).__init__()
-        if not bus:
-            bus = dbus.SessionBus()
-        self.proxy = bus.get_object(name, "/org/mpris/MediaPlayer2")
-        self.iface = dbus.Interface(self.proxy, IROOT)
-        self.properties = dbus.Interface(self.proxy, IPROPERTIES)
-        self.get = partial(self.properties.Get, IROOT)
-        self.set = partial(self.properties.Set, IROOT)
+        super(Root, self).__init__(name, bus)
 
     def Raise(self):
         """Brings the media player's user interface to the front
