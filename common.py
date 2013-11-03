@@ -62,6 +62,3 @@ def available_players():
         owner_name = bus.get_name_owner(name)
         players.add(convert(owner_name))
     return players
-
-
-print(available_players())
