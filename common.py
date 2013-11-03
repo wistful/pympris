@@ -15,6 +15,8 @@ IPROPERTIES = "org.freedesktop.DBus.Properties"
 
 def convert2dbus(value, signature):
     """Convert Python type to dbus type according signature"""
+    if len(signature) == 2 and signature.startswith('a'):
+        return dbus.Array(value, signature=signature[-1])
     type_map = {
         'b': dbus.Boolean, 'y': dbus.Byte, 'n': dbus.Int16,
         'i': dbus.Int32, 'x': dbus.Int64, 'q': dbus.UInt16, 'u': dbus.UInt32,
@@ -40,6 +42,8 @@ def convert(dbus_obj):
     if isinstance(dbus_obj, dbus.Dictionary):
         return {convert(key): convert(value)
                 for key, value in dbus_obj.items()}
+    if isinstance(dbus_obj, dbus.Struct):
+        return tuple(map(convert, dbus_obj))
 
 
 def converter(f):
