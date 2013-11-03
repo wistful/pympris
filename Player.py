@@ -21,27 +21,27 @@ class Player(Base):
 
     def Next(self):
         """Skips to the next track in the tracklist."""
-        self.proxy.Next()
+        self.iface.Next()
 
     def Previous(self):
         """Skips to the previous track in the tracklist."""
-        self.proxy.Previous()
+        self.iface.Previous()
 
     def Pause(self):
         """Pauses playback."""
-        self.proxy.Pause()
+        self.iface.Pause()
 
     def PlayPause(self):
         """Pauses playback."""
-        self.proxy.PlayPause()
+        self.iface.PlayPause()
 
     def Stop(self):
         """Stops playback."""
-        self.proxy.Stop()
+        self.iface.Stop()
 
     def Play(self):
         """Starts or resumes playback."""
-        self.proxy.Play()
+        self.iface.Play()
 
     def Seek(self, offset):
         """Seeks forward in the current track
@@ -49,7 +49,7 @@ class Player(Base):
             Offset — The number of microseconds to seek forward.
         A negative value seeks back.
         """
-        self.proxy.Seek(convert2dbus(offset, 'x'))
+        self.iface.Seek(convert2dbus(offset, 'x'))
 
     def SetPosition(self, track_id, position):
         """Sets the current track position in microseconds.
@@ -62,7 +62,7 @@ class Player(Base):
         If the Position argument is greater than the track length, do nothing.
         If the CanSeek property is false, this has no effect.
         """
-        self.proxy.SetPosition(convert2dbus(track_id, 'o'),
+        self.iface.SetPosition(convert2dbus(track_id, 'o'),
                                convert2dbus(position, 'x'))
 
     def OpenUri(self, uri):
@@ -78,7 +78,7 @@ class Player(Base):
         If the uri scheme or the mime-type of the uri to open is not supported,
         this method does nothing and may raise an error.
         """
-        self.proxy.OpenUri(uri)
+        self.iface.OpenUri(uri)
 
     @property
     @converter
