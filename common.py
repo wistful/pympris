@@ -13,6 +13,16 @@ IPLAYLISTS = IROOT + ".PlayLists"
 IPROPERTIES = "org.freedesktop.DBus.Properties"
 
 
+def convert2dbus(value, signature):
+    """Convert Python type to dbus type according signature"""
+    type_map = {
+        'b': dbus.Boolean, 'y': dbus.Byte, 'n': dbus.Int16,
+        'i': dbus.Int32, 'x': dbus.Int64, 'q': dbus.UInt16, 'u': dbus.UInt32,
+        't': dbus.UInt64, 'd': dbus.Double, 'o': dbus.ObjectPath,
+        'g': dbus.Signature, 's': dbus.UTF8String}
+    return type_map[signature](value)
+
+
 def convert(dbus_obj):
     if isinstance(dbus_obj, dbus.Boolean):
         return bool(dbus_obj)
@@ -24,9 +34,12 @@ def convert(dbus_obj):
         return float(dbus_obj)
     if filter(lambda obj_type: isinstance(dbus_obj, obj_type),
              (dbus.ObjectPath, dbus.Signature, dbus.String, dbus.UTF8String)):
-        return str(dbus_obj)
+        return unicode(dbus_obj)
     if isinstance(dbus_obj, dbus.Array):
         return map(convert, dbus_obj)
+    if isinstance(dbus_obj, dbus.Dictionary):
+        return {convert(key): convert(value)
+                for key, value in dbus_obj.items()}
 
 
 def converter(f):
