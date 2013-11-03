@@ -20,7 +20,6 @@ class PlayLists(Base):
 
     """docstring for PlayLists"""
 
-    OBJ_PATH = "/org/mpris/MediaPlayer2"
     IFACE = "org.mpris.MediaPlayer2.Playlists"
 
     def __init__(self, name, bus=None):

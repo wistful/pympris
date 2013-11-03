@@ -13,7 +13,6 @@ class Root(Base):
 
     """docstring for MediaPlayer"""
 
-    OBJ_PATH = "/org/mpris/MediaPlayer2"
     IFACE = "org.mpris.MediaPlayer2"
 
     def __init__(self, name, bus=None):

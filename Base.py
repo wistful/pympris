@@ -9,6 +9,9 @@ from common import IPROPERTIES
 
 class Base(object):
     """Base class to implement dbus Interfaces"""
+
+    OBJ_PATH = "/org/mpris/MediaPlayer2"
+
     def __init__(self, name, bus):
         if not bus:
             bus = dbus.SessionBus()
