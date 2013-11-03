@@ -4,16 +4,21 @@
 """
 http://specifications.freedesktop.org/mpris-spec/latest/Track_List_Interface.html
 """
+from common import converter, convert2dbus
+from Base import Base
 
 
-class TrackList(object):
+class TrackList(Base):
 
     """docstring for TrackList"""
 
-    def __init__(self, arg):
-        super(TrackList, self).__init__()
-        self.arg = arg
+    OBJ_PATH = "/org/mpris/MediaPlayer2"
+    IFACE = "org.mpris.MediaPlayer2.TrackList"
 
+    def __init__(self, name, bus=None):
+        super(TrackList, self).__init__(name, bus)
+
+    @converter
     def GetTracksMetadata(self, track_ids):
         """Gets all the metadata available for a set of tracks.
         Parameters:
@@ -22,6 +27,7 @@ class TrackList(object):
         Returns:
             Metadata of the set of tracks given as input.
         """
+        return self.iface.GetTracksMetadata(convert2dbus(track_ids, 'ao'))
 
     def AddTrack(self, uri, after_track, set_as_current):
         """Adds a URI in the TrackList.
@@ -32,23 +38,34 @@ class TrackList(object):
             set_as_current - Whether the newly inserted track
                              should be considered as the current track.
         """
+        self.iface.AddTrack(uri,
+                            convert2dbus(after_track, 'o'),
+                            convert2dbus(set_as_current, 'b'))
 
     def RemoveTrack(self, track_id):
         """Removes an item from the TrackList.
         Parameters:
             track_id - Identifier of the track to be removed.
         """
+        self.iface.RemoveTrack(convert2dbus(track_id, 'o'))
 
     def GoTo(self, track_id):
         """Skip to the specified TrackId.
         Parameters:
             track_id - Identifier of the track to skip to.
         """
+        self.iface.GoTo(convert2dbus(track_id, 'o'))
 
+    @property
+    @converter
     def Tracks(self):
         """Returns an list which contains the identifier of each track
         in the tracklist, in order."""
+        return self.get('Tracks')
 
+    @property
+    @converter
     def CanEditTracks(self):
         """If false, calling AddTrack or RemoveTrack will have no effect,
         and may raise a NotSupported error."""
+        return self.get('CanEditTracks')
