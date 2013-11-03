@@ -15,17 +15,6 @@ class MediaPlayer(object):
         super(MediaPlayer, self).__init__()
         self.dbus_name = dbus_name
         self.root = Root(dbus_name)
-        self.player = Player
-        self.playlists = PlayLists
-        self.tack_list = TrackList
-
-
-def main():
-    mp = MediaPlayer(':1.8608')
-    root = mp.root
-    print(root.Identity)
-    print(root.SupportedMimeTypes)
-
-
-if __name__ == '__main__':
-    main()
+        self.player = Player(dbus_name)
+        self.playlists = PlayLists(dbus_name)
+        self.track_list = TrackList(dbus_name)
