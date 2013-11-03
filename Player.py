@@ -4,33 +4,44 @@
 """
 http://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html
 """
+from common import converter, convert2dbus
+
+from Base import Base
 
 
-class Player(object):
+class Player(Base):
 
     """docstring for Player"""
 
-    def __init__(self, arg):
-        super(Player, self).__init__()
-        self.arg = arg
+    OBJ_PATH = "/org/mpris/MediaPlayer2"
+    IFACE = "org.mpris.MediaPlayer2.Player"
+
+    def __init__(self, name, bus=None):
+        super(Player, self).__init__(name, bus)
 
     def Next(self):
         """Skips to the next track in the tracklist."""
+        self.proxy.Next()
 
     def Previous(self):
         """Skips to the previous track in the tracklist."""
+        self.proxy.Previous()
 
     def Pause(self):
         """Pauses playback."""
+        self.proxy.Pause()
 
     def PlayPause(self):
         """Pauses playback."""
+        self.proxy.PlayPause()
 
     def Stop(self):
         """Stops playback."""
+        self.proxy.Stop()
 
     def Play(self):
         """Starts or resumes playback."""
+        self.proxy.Play()
 
     def Seek(self, offset):
         """Seeks forward in the current track
@@ -38,6 +49,7 @@ class Player(object):
             Offset — The number of microseconds to seek forward.
         A negative value seeks back.
         """
+        self.proxy.Seek(convert2dbus(offset, 'x'))
 
     def SetPosition(self, track_id, position):
         """Sets the current track position in microseconds.
@@ -50,6 +62,8 @@ class Player(object):
         If the Position argument is greater than the track length, do nothing.
         If the CanSeek property is false, this has no effect.
         """
+        self.proxy.SetPosition(convert2dbus(track_id, 'o'),
+                               convert2dbus(position, 'x'))
 
     def OpenUri(self, uri):
         """Opens the Uri given as an argument
@@ -64,12 +78,18 @@ class Player(object):
         If the uri scheme or the mime-type of the uri to open is not supported,
         this method does nothing and may raise an error.
         """
+        self.proxy.OpenUri(uri)
 
+    @property
+    @converter
     def PlaybackStatus(self):
         """The current playback status.
         May be "Playing", "Paused" or "Stopped".
         """
+        return self.get('PlaybackStatus')
 
+    @property
+    @converter
     def LoopStatus(self):
         """The current loop / repeat status
         May be:
@@ -79,56 +99,125 @@ class Player(object):
                     the begining once it has finished playing
             "Playlist" if the playback loops through a list of tracks
         """
+        return self.get('LoopStatus')
 
+    @LoopStatus.setter
+    def LoopStatus(self, status):
+        """The current loop / repeat status
+        May be:
+            "None" if the playback will stop
+                   when there are no more tracks to play
+            "Track" if the current track will start again from
+                    the begining once it has finished playing
+            "Playlist" if the playback loops through a list of tracks
+        """
+        self.set('LoopStatus', status)
+
+    @property
+    @converter
     def Rate(self):
         """The current playback rate."""
+        return self.get('Rate')
 
+    @Rate.setter
+    def Rate(self, value):
+        """The current playback rate."""
+        self.set('Rate', value)
+
+    @property
+    @converter
     def Shuffle(self):
         """A value of false indicates that playback
         is progressing linearly through a playlist, while true means playback
         is progressing through a playlist in some other order.
         """
+        return self.get('Shuffle')
 
+    @Shuffle.setter
+    def Shuffle(self, value):
+        """A value of false indicates that playback
+        is progressing linearly through a playlist, while true means playback
+        is progressing through a playlist in some other order.
+        """
+        self.set('Shuffle', value)
+
+    @property
+    @converter
     def Metadata(self):
         """The metadata of the current element."""
+        return self.get('Metadata')
 
+    @property
+    @converter
     def Volume(self):
         """The volume level"""
+        return self.get('Volume')
 
+    @Volume.setter
+    def Volume(self, value):
+        """The volume level"""
+        self.set('Volume', value)
+
+    @property
+    @converter
     def Position(self):
         """The current track position in microseconds,
         between 0 and the 'mpris:length' metadata entry (see Metadata).
         """
+        return self.get('Position')
 
+    @property
+    @converter
     def MinimumRate(self):
         """The minimum value which the Rate property can take.
         This value should always be 1.0 or less.
         """
+        return self.get('MinimumRate')
 
+    @property
     def MaximumRate(self):
         """The maximum value which the Rate property can take.
         This value should always be 1.0 or greater."""
+        return self.get('MaximumRate')
 
+    @property
+    @converter
     def CanGoNext(self):
         """Whether the client can call the Next method on this interface
         and expect the current track to change.
         """
+        return self.get('CanGoNext')
 
+    @property
+    @converter
     def CanGoPrevious(self):
         """Whether the client can call the Previous method on this interface
         and expect the current track to change.
         """
+        return self.get('CanGoPrevious')
 
+    @property
+    @converter
     def CanPlay(self):
         """Whether playback can be started using Play or PlayPause."""
+        return self.get('CanPlay')
 
+    @property
+    @converter
     def CanPause(self):
         """Whether playback can be paused using Pause or PlayPause."""
+        return self.get('CanPause')
 
+    @property
+    @converter
     def CanSeek(self):
         """Whether the client can control the playback position
         using Seek and SetPosition. This may be different for different tracks.
         """
+        return self.get('CanSeek')
 
+    @property
+    @converter
     def CanControl(self):
         """Whether the media player may be controlled over this interface."""
+        return self.get('CanControl')
