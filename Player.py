@@ -65,17 +65,6 @@ class Player(object):
         this method does nothing and may raise an error.
         """
 
-    def Seeked(postition):
-        """Indicates that the track position has changed in a way
-        that is inconsistant with the current playing state.
-        Parameters
-            position — The new position, in microseconds.
-
-        This signal does not need to be emitted
-        when playback starts or when the track changes,
-        unless the track is starting at an unexpected position.
-        """
-
     def PlaybackStatus(self):
         """The current playback status.
         May be "Playing", "Paused" or "Stopped".
