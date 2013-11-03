@@ -4,23 +4,37 @@
 """
 http://specifications.freedesktop.org/mpris-spec/latest/Playlists_Interface.html
 """
+from common import converter, convert2dbus
+from Base import Base
 
 
-class PlayLists(object):
+class PlaylistOrdering(object):
+    Alphabetical = 'Alphabetical'
+    CreationDate = 'Created'
+    ModifiedDate = 'Modified'
+    LastPlayDate = 'Played'
+    UserDefined = 'User'
+
+
+class PlayLists(Base):
 
     """docstring for PlayLists"""
 
-    def __init__(self, arg):
-        super(PlayLists, self).__init__()
-        self.arg = arg
+    OBJ_PATH = "/org/mpris/MediaPlayer2"
+    IFACE = "org.mpris.MediaPlayer2.Playlists"
+
+    def __init__(self, name, bus=None):
+        super(PlayLists, self).__init__(name, bus)
 
     def ActivatePlaylist(self, playlist_id):
         """Starts playing the given playlist.
         Parameters:
             playlist_id - The id of the playlist to activate.
         """
+        self.iface.ActivatePlaylist(playlist_id)
 
-    def GetPlayLists(self, start, max_count, order, reversed):
+    @converter
+    def GetPlaylists(self, start, max_count, order, reversed):
         """Gets a set of playlists.
         Parameters:
             start - The index of the first playlist to be fetched
@@ -30,12 +44,28 @@ class PlayLists(object):
             reversed - Whether the order should be reversed.
 
         """
+        cv = convert2dbus
+        return self.iface.GetPlaylists(cv(start, 'u'),
+                                       cv(max_count, 'u'),
+                                       cv(order, 's'),
+                                       cv(reversed, 'b'))
 
+    @property
+    @converter
     def PlaylistCount(self):
         """The number of playlists available."""
+        return self.get('PlaylistCount')
 
+    @property
+    @converter
     def Orderings(self):
         """The available orderings. At least one must be offered."""
+        return self.get('Orderings')
 
+    @property
+    @converter
     def ActivePlaylist(self):
         """The currently-active playlist."""
+        valid, info = tuple(self.get('ActivePlaylist'))
+        if valid:
+            return info
