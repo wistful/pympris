@@ -5,21 +5,12 @@
 http://specifications.freedesktop.org/mpris-spec/latest/
 http://specifications.freedesktop.org/mpris-spec/latest/Media_Player.html
 """
-
-from functools import wraps, partial
+from functools import partial
 
 from common import IROOT, IPROPERTIES
-from common import convert
+from common import converter
 
 import dbus
-
-
-def converter(f):
-    """Decorator to convert from dbus type to Python type"""
-    @wraps(f)
-    def wrapper(*args, **kwds):
-        return convert(f(*args, **kwds))
-    return wrapper
 
 
 class Root(object):

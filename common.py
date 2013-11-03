@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
+from functools import wraps
 
 import dbus
 
@@ -26,6 +27,14 @@ def convert(dbus_obj):
         return str(dbus_obj)
     if isinstance(dbus_obj, dbus.Array):
         return map(convert, dbus_obj)
+
+
+def converter(f):
+    """Decorator to convert from dbus type to Python type"""
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        return convert(f(*args, **kwds))
+    return wrapper
 
 
 def available_players():
