@@ -44,6 +44,7 @@ def convert(dbus_obj):
                 for key, value in dbus_obj.items()}
     if isinstance(dbus_obj, dbus.Struct):
         return tuple(map(convert, dbus_obj))
+    return dbus_obj
 
 
 def converter(f):
