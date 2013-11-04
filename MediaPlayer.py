@@ -11,10 +11,11 @@ class MediaPlayer(object):
 
     """docstring for MediaPlayer"""
 
-    def __init__(self, dbus_name):
+    def __init__(self, dbus_name, bus=None):
         super(MediaPlayer, self).__init__()
         self.dbus_name = dbus_name
-        self.root = Root(dbus_name)
-        self.player = Player(dbus_name)
-        self.playlists = PlayLists(dbus_name)
-        self.track_list = TrackList(dbus_name)
+        self.bus = bus
+        self.root = Root(dbus_name, bus)
+        self.player = Player(dbus_name, bus)
+        self.playlists = PlayLists(dbus_name, bus)
+        self.track_list = TrackList(dbus_name, bus)
