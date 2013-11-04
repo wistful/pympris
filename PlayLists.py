@@ -10,6 +10,14 @@ wich implemented MPRIS2 PlayLists interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Playlists_Interface.html
 
 class PlaylistOrdering uses as an enum for Ordering type.
+
+pl = PlayLists('org.mpris.MediaPlayer2.rhythmbox')
+print pl.PlaylistCount
+print pl.ActivePlaylist
+
+items = pl.GetPlaylists(0, 100, PlaylistOrdering.Alphabetical, reversed=False)
+for uri, name, icon_uri in items:
+    print uri, name, icon_uri
 """
 
 from common import converter, convert2dbus

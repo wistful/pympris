@@ -8,6 +8,21 @@
 This module provides a `Player` class
 wich implemented MPRIS2 Player interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html
+
+Usage:
+
+player = Player('org.mpris.MediaPlayer2.vlc')
+if player.CanPause:
+    player.PlayPause()
+
+player.Volume = player.Volume*2
+player.Play()
+if player.CanGoNext:
+    player.Next()
+
+if player.CanSeek:
+    player.Seek = 15000000
+
 """
 
 from common import converter, convert2dbus

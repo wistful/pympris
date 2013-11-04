@@ -7,6 +7,24 @@
 """
 This module provides a `MediaPlayer` class
 wich contains instances of all implementations of MPRIS2 interfaces.
+
+Usage:
+
+mp = MediaPlayer('org.mpris.MediaPlayer2.rhythmbox')
+print mp.root.Identity
+if mp.root.CanRaise:
+    mp.root.Raise()
+
+if mp.player.CanPause and mp.player.CanPlay:
+    mp.player.PlayPause()
+if mp.player.CanGoNext:
+    mp.player.Next()
+
+print mp.track_list.Tracks
+print mp.playlists.GetPlaylists
+
+if mp.root.CanQuit:
+    mp.root.Quit()
 """
 
 from Root import Root

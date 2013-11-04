@@ -8,6 +8,13 @@
 This module provides a `TrackList` class
 wich implemented MPRIS2 TrackList interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Track_List_Interface.html
+
+Usage:
+
+tl = TrackList('org.mpris.MediaPlayer2.vlc')
+print tl.Tracks
+tl.RemoveTrack(tl.Tracks[2])
+
 """
 
 from common import converter, convert2dbus

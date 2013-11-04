@@ -8,6 +8,18 @@
 This module provides a `Root` class
 wich implemented MPRIS2 Root interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Media_Player.html
+
+Usage:
+
+root = Root('org.mpris.MediaPlayer2.vlc')
+print root.Identity
+if root.CanRaise:
+    root.Raise()
+print "Supported Mime Types: ", root.SupportedMimeTypes
+print "Supported Uri Schemes: ", root.SupportedUriSchemes
+
+if root.CanQuit:
+    root.Quit
 """
 
 from common import converter
