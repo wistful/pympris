@@ -1,16 +1,24 @@
 #!/usr/bin/env python
 # coding=utf-8
-from functools import wraps
 
+# Copyright (c) Mikhail Mamrouski.
+# See LICENSE for details.
+
+"""
+This module provides helper functions:
+
+`convert2dbus` - converts from Python type to DBUS type according signature
+`convert` - function to convert dbus object to python object.
+`converter` - decorator to convert dbus object to python object.
+`available_players` - function searchs and returns unique names of objects
+                      which implemented MPRIS2 interfaces.
+
+"""
+
+from functools import wraps
 import dbus
 
 MPRIS_NAME_PREFIX = "org.mpris.MediaPlayer2"
-MPRIS_OBJECT_PATH = "/org/mpris/MediaPlayer2"
-IROOT = "org.mpris.MediaPlayer2"
-IPLAYER = IROOT + ".Player"
-ITRACKLIST = IROOT + ".TrackList"
-IPLAYLISTS = IROOT + ".PlayLists"
-IPROPERTIES = "org.freedesktop.DBus.Properties"
 
 
 def convert2dbus(value, signature):
@@ -56,6 +64,8 @@ def converter(f):
 
 
 def available_players():
+    """Search and return set of unique names of objects
+    which implemented MPRIS2 interfaces."""
     bus = dbus.SessionBus()
     players = set()
     for name in filter(lambda item: item.startswith(MPRIS_NAME_PREFIX),

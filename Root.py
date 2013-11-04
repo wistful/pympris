@@ -1,17 +1,24 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+# Copyright (c) Mikhail Mamrouski.
+# See LICENSE for details.
+
 """
-http://specifications.freedesktop.org/mpris-spec/latest/
+This module provides a `Root` class
+wich implemented MPRIS2 Root interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Media_Player.html
 """
+
 from common import converter
 from Base import Base
 
 
 class Root(Base):
 
-    """docstring for MediaPlayer"""
+    """class implements methods and properties
+    to working with MPRIS2 Root interface
+    """
 
     IFACE = "org.mpris.MediaPlayer2"
 

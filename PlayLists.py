@@ -1,9 +1,17 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+# Copyright (c) Mikhail Mamrouski.
+# See LICENSE for details.
+
 """
+This module provides a `PlayLists` class
+wich implemented MPRIS2 PlayLists interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Playlists_Interface.html
+
+class PlaylistOrdering uses as an enum for Ordering type.
 """
+
 from common import converter, convert2dbus
 from Base import Base
 
@@ -18,7 +26,9 @@ class PlaylistOrdering(object):
 
 class PlayLists(Base):
 
-    """docstring for PlayLists"""
+    """class implements methods and properties
+    to working with MPRIS2 Playlists interface
+    """
 
     IFACE = "org.mpris.MediaPlayer2.Playlists"
 

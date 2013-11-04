@@ -1,16 +1,24 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+# Copyright (c) Mikhail Mamrouski.
+# See LICENSE for details.
+
 """
+This module provides a `TrackList` class
+wich implemented MPRIS2 TrackList interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Track_List_Interface.html
 """
+
 from common import converter, convert2dbus
 from Base import Base
 
 
 class TrackList(Base):
 
-    """docstring for TrackList"""
+    """class implements methods and properties
+    to working with MPRIS2 TrackList interface
+    """
 
     IFACE = "org.mpris.MediaPlayer2.TrackList"
 

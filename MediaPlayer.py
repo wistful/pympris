@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+# Copyright (c) Mikhail Mamrouski.
+# See LICENSE for details.
+
+"""
+This module provides a `MediaPlayer` class
+wich contains instances of all implementations of MPRIS2 interfaces.
+"""
+
 from Root import Root
 from Player import Player
 from PlayLists import PlayLists
@@ -9,7 +17,7 @@ from TrackList import TrackList
 
 class MediaPlayer(object):
 
-    """docstring for MediaPlayer"""
+    """Class uses as helper class."""
 
     def __init__(self, dbus_name, bus=None):
         super(MediaPlayer, self).__init__()

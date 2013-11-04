@@ -1,17 +1,24 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+# Copyright (c) Mikhail Mamrouski.
+# See LICENSE for details.
+
 """
+This module provides a `Player` class
+wich implemented MPRIS2 Player interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html
 """
-from common import converter, convert2dbus
 
+from common import converter, convert2dbus
 from Base import Base
 
 
 class Player(Base):
 
-    """docstring for Player"""
+    """class implements methods and properties
+    to working with MPRIS2 Player interface
+    """
 
     IFACE = "org.mpris.MediaPlayer2.Player"
 
