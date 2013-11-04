@@ -1,5 +1,5 @@
 # pympris #
-This is a Python wrapper around the MPRIS2 interface of media players.
+This is a Python wrapper around the MPRIS2 interfaces of media players.
 
 ## Requires ##
 
