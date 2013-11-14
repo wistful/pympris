@@ -22,7 +22,6 @@ if root.CanQuit:
     root.Quit
 """
 
-from common import converter
 from Base import Base
 
 
@@ -60,7 +59,6 @@ class Root(Base):
         self.iface.Quit()
 
     @property
-    @converter
     def CanQuit(self):
         """If false, calling Quit will have no effect,
         and may raise a NotSupported error.
@@ -70,7 +68,6 @@ class Root(Base):
         return self.get('CanQuit')
 
     @property
-    @converter
     def Fullscreen(self):
         """This property is optional.
         Clients should handle its absence gracefully.
@@ -94,7 +91,6 @@ class Root(Base):
         self.set('Fullscreen', state)
 
     @property
-    @converter
     def CanSetFullscreen(self):
         """If false, attempting to set Fullscreen will have no effect,
         and may raise an error.
@@ -108,7 +104,6 @@ class Root(Base):
         return self.get('CanSetFullscreen')
 
     @property
-    @converter
     def CanRaise(self):
         """If false, calling Raise will have no effect,
         and may raise a NotSupported error.
@@ -119,14 +114,12 @@ class Root(Base):
         return self.get('CanRaise')
 
     @property
-    @converter
     def HasTrackList(self):
         """Indicates whether the /org/mpris/MediaPlayer2 object
         implements the org.mpris.MediaPlayer2.TrackList interface."""
         return self.get('HasTrackList')
 
     @property
-    @converter
     def Identity(self):
         """A friendly name to identify the media player to users.
         This should usually match the name found in .desktop files
@@ -134,7 +127,6 @@ class Root(Base):
         return self.get('Identity')
 
     @property
-    @converter
     def DesktopEntry(self):
         """The basename of an installed .desktop file which complies
         with the Desktop entry specification,
@@ -146,7 +138,6 @@ class Root(Base):
         return self.get('DesktopEntry')
 
     @property
-    @converter
     def SupportedUriSchemes(self):
         """The URI schemes supported by the media player.
         This can be viewed as protocols supported by the player
@@ -157,7 +148,6 @@ class Root(Base):
         return self.get('SupportedUriSchemes')
 
     @property
-    @converter
     def SupportedMimeTypes(self):
         """The mime-types supported by the media player.
         Mime-types should be in the standard format

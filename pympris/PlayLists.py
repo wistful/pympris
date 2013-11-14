@@ -20,7 +20,7 @@ for uri, name, icon_uri in items:
     print uri, name, icon_uri
 """
 
-from common import converter, convert2dbus
+from common import convert2dbus
 from Base import Base
 
 
@@ -50,7 +50,6 @@ class PlayLists(Base):
         """
         self.iface.ActivatePlaylist(playlist_id)
 
-    @converter
     def GetPlaylists(self, start, max_count, order, reversed):
         """Gets a set of playlists.
         Parameters:
@@ -68,19 +67,16 @@ class PlayLists(Base):
                                        cv(reversed, 'b'))
 
     @property
-    @converter
     def PlaylistCount(self):
         """The number of playlists available."""
         return self.get('PlaylistCount')
 
     @property
-    @converter
     def Orderings(self):
         """The available orderings. At least one must be offered."""
         return self.get('Orderings')
 
     @property
-    @converter
     def ActivePlaylist(self):
         """The currently-active playlist."""
         valid, info = tuple(self.get('ActivePlaylist'))
