@@ -10,6 +10,7 @@ This module provides helper functions:
 `convert2dbus` - converts from Python type to DBUS type according signature
 `convert` - function to convert dbus object to python object.
 `converter` - decorator to convert dbus object to python object.
+`exception_wrapper` - decorator to convert dbus exception to pympris exception.
 `available_players` - function searchs and returns unique names of objects
                       which implemented MPRIS2 interfaces.
 
@@ -63,6 +64,18 @@ def converter(f):
     return wrapper
 
 
+def exception_wrapper(f):
+    """Decorator to convert dbus exception to pympris exception"""
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        try:
+            return f(*args, **kwds)
+        except dbus.exceptions.DBusException as err:
+            _args = err.args
+            raise PyMPRISException(*_args)
+    return wrapper
+
+
 def available_players():
     """Search and return set of unique names of objects
     which implemented MPRIS2 interfaces."""
@@ -73,3 +86,9 @@ def available_players():
         owner_name = bus.get_name_owner(name)
         players.add(convert(owner_name))
     return players
+
+
+class PyMPRISException(Exception):
+    """docstring for PyMPRISException"""
+    def __init__(self, *args):
+        super(PyMPRISException, self).__init__(*args)
