@@ -3,7 +3,7 @@ from PlayLists import PlayLists, PlaylistOrdering
 from Player import Player
 from Root import Root
 from TrackList import TrackList
-from common import available_players
+from common import available_players, PyMPRISException
 
 __version__ = '1.0'
 __description__ = 'Library to control media players using MPRIS2 interfaces'
