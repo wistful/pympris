@@ -25,7 +25,7 @@ if player.CanSeek:
 
 """
 
-from common import converter, convert2dbus
+from common import convert2dbus
 from Base import Base
 
 
@@ -34,6 +34,8 @@ class Player(Base):
     """class implements methods and properties
     to working with MPRIS2 Player interface
     """
+
+    # __metaclass__ = ConverterMeta
 
     IFACE = "org.mpris.MediaPlayer2.Player"
 
@@ -102,7 +104,6 @@ class Player(Base):
         self.iface.OpenUri(uri)
 
     @property
-    @converter
     def PlaybackStatus(self):
         """The current playback status.
         May be "Playing", "Paused" or "Stopped".
@@ -110,7 +111,6 @@ class Player(Base):
         return self.get('PlaybackStatus')
 
     @property
-    @converter
     def LoopStatus(self):
         """The current loop / repeat status
         May be:
@@ -135,7 +135,6 @@ class Player(Base):
         self.set('LoopStatus', status)
 
     @property
-    @converter
     def Rate(self):
         """The current playback rate."""
         return self.get('Rate')
@@ -146,7 +145,6 @@ class Player(Base):
         self.set('Rate', value)
 
     @property
-    @converter
     def Shuffle(self):
         """A value of false indicates that playback
         is progressing linearly through a playlist, while true means playback
@@ -163,13 +161,11 @@ class Player(Base):
         self.set('Shuffle', value)
 
     @property
-    @converter
     def Metadata(self):
         """The metadata of the current element."""
         return self.get('Metadata')
 
     @property
-    @converter
     def Volume(self):
         """The volume level"""
         return self.get('Volume')
@@ -180,7 +176,6 @@ class Player(Base):
         self.set('Volume', value)
 
     @property
-    @converter
     def Position(self):
         """The current track position in microseconds,
         between 0 and the 'mpris:length' metadata entry (see Metadata).
@@ -188,7 +183,6 @@ class Player(Base):
         return self.get('Position')
 
     @property
-    @converter
     def MinimumRate(self):
         """The minimum value which the Rate property can take.
         This value should always be 1.0 or less.
@@ -202,7 +196,6 @@ class Player(Base):
         return self.get('MaximumRate')
 
     @property
-    @converter
     def CanGoNext(self):
         """Whether the client can call the Next method on this interface
         and expect the current track to change.
@@ -210,7 +203,6 @@ class Player(Base):
         return self.get('CanGoNext')
 
     @property
-    @converter
     def CanGoPrevious(self):
         """Whether the client can call the Previous method on this interface
         and expect the current track to change.
@@ -218,19 +210,16 @@ class Player(Base):
         return self.get('CanGoPrevious')
 
     @property
-    @converter
     def CanPlay(self):
         """Whether playback can be started using Play or PlayPause."""
         return self.get('CanPlay')
 
     @property
-    @converter
     def CanPause(self):
         """Whether playback can be paused using Pause or PlayPause."""
         return self.get('CanPause')
 
     @property
-    @converter
     def CanSeek(self):
         """Whether the client can control the playback position
         using Seek and SetPosition. This may be different for different tracks.
@@ -238,7 +227,6 @@ class Player(Base):
         return self.get('CanSeek')
 
     @property
-    @converter
     def CanControl(self):
         """Whether the media player may be controlled over this interface."""
         return self.get('CanControl')

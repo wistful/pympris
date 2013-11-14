@@ -17,7 +17,7 @@ tl.RemoveTrack(tl.Tracks[2])
 
 """
 
-from common import converter, convert2dbus
+from common import convert2dbus
 from Base import Base
 
 
@@ -32,7 +32,6 @@ class TrackList(Base):
     def __init__(self, name, bus=None):
         super(TrackList, self).__init__(name, bus)
 
-    @converter
     def GetTracksMetadata(self, track_ids):
         """Gets all the metadata available for a set of tracks.
         Parameters:
@@ -71,14 +70,12 @@ class TrackList(Base):
         self.iface.GoTo(convert2dbus(track_id, 'o'))
 
     @property
-    @converter
     def Tracks(self):
         """Returns an list which contains the identifier of each track
         in the tracklist, in order."""
         return self.get('Tracks')
 
     @property
-    @converter
     def CanEditTracks(self):
         """If false, calling AddTrack or RemoveTrack will have no effect,
         and may raise a NotSupported error."""

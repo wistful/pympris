@@ -10,11 +10,15 @@ for implementing MPRIS2 interfaces.
 
 Decorator 'signal_wrapper' used by `Base` class
 to convert function's arguments from dbus type to python type.
+
+`BaseMeta` metaclass (inherited ExceptionMeta and ConverterMeta classes)
+to avoid returning or raising dbus types and exceptions.
 """
 
 from functools import partial, wraps
+import types
 import dbus
-from common import convert
+from common import convert, converter, exception_wrapper
 
 IPROPERTIES = "org.freedesktop.DBus.Properties"
 
@@ -29,10 +33,52 @@ def signal_wrapper(f):
     return wrapper
 
 
+class ExceptionMeta(type):
+    """Metaclass wraps all class' functions and properties
+    in `exception_wrapper` decorator to avoid raising dbus exceptions
+    """
+    def __new__(cls, name, parents, dct):
+        fn = exception_wrapper
+        for attr_name in dct:
+            if isinstance(dct[attr_name], types.FunctionType):
+                dct[attr_name] = fn(dct[attr_name])
+            elif isinstance(dct[attr_name], property) and dct[attr_name].fget:
+                dct[attr_name] = property(
+                    fn(dct[attr_name].fget) if dct[attr_name].fget else None,
+                    fn(dct[attr_name].fset) if dct[attr_name].fset else None,
+                    fn(dct[attr_name].fdel) if dct[attr_name].fdel else None)
+
+        return super(ExceptionMeta, cls).__new__(cls, name, parents, dct)
+
+
+class ConverterMeta(type):
+    """Metaclass wraps all class' functions and properties
+    in `converter` decorator to avoid returning dbus types
+    """
+
+    def __new__(cls, name, parents, dct):
+        for attr_name in dct:
+            if isinstance(dct[attr_name], types.FunctionType):
+                dct[attr_name] = converter(dct[attr_name])
+            elif isinstance(dct[attr_name], property) and dct[attr_name].fget:
+                dct[attr_name] = property(converter(dct[attr_name].fget),
+                                          dct[attr_name].fset,
+                                          dct[attr_name].fdel
+                                          )
+
+        return super(ConverterMeta, cls).__new__(cls, name, parents, dct)
+
+
+class BaseMeta(ExceptionMeta, ConverterMeta):
+    pass
+
+
 class Base(object):
+
     """Base class provides common functionality
     for other classes which implement MPRIS2 interfaces"""
 
+    __metaclass__ = BaseMeta
     OBJ_PATH = "/org/mpris/MediaPlayer2"
 
     def __init__(self, name, bus=None):
