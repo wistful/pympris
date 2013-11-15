@@ -37,9 +37,9 @@ class MediaPlayer(object):
 
     """Class uses as helper class."""
 
-    def __init__(self, dbus_name, bus=None):
+    def __init__(self, dbus_name, bus=None, private=False):
         super(MediaPlayer, self).__init__()
-        self.root = Root(dbus_name, bus)
-        self.player = Player(dbus_name, bus)
-        self.playlists = PlayLists(dbus_name, bus)
-        self.track_list = TrackList(dbus_name, bus)
+        self.root = Root(dbus_name, bus, private)
+        self.player = Player(dbus_name, bus, private)
+        self.playlists = PlayLists(dbus_name, bus, private)
+        self.track_list = TrackList(dbus_name, bus, private)

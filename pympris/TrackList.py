@@ -29,8 +29,8 @@ class TrackList(Base):
 
     IFACE = "org.mpris.MediaPlayer2.TrackList"
 
-    def __init__(self, name, bus=None):
-        super(TrackList, self).__init__(name, bus)
+    def __init__(self, name, bus=None, private=False):
+        super(TrackList, self).__init__(name, bus, private)
 
     def GetTracksMetadata(self, track_ids):
         """Gets all the metadata available for a set of tracks.

@@ -33,8 +33,8 @@ class Root(Base):
 
     IFACE = "org.mpris.MediaPlayer2"
 
-    def __init__(self, name, bus=None):
-        super(Root, self).__init__(name, bus)
+    def __init__(self, name, bus=None, private=False):
+        super(Root, self).__init__(name, bus, private)
 
     def Raise(self):
         """Brings the media player's user interface to the front

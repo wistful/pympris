@@ -39,8 +39,8 @@ class Player(Base):
 
     IFACE = "org.mpris.MediaPlayer2.Player"
 
-    def __init__(self, name, bus=None):
-        super(Player, self).__init__(name, bus)
+    def __init__(self, name, bus=None, private=False):
+        super(Player, self).__init__(name, bus, private)
 
     def Next(self):
         """Skips to the next track in the tracklist."""

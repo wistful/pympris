@@ -81,12 +81,13 @@ class Base(object):
     __metaclass__ = BaseMeta
     OBJ_PATH = "/org/mpris/MediaPlayer2"
 
-    def __init__(self, name, bus=None):
+    def __init__(self, name, bus=None, private=False):
         """Init inner attributes to work with dbus.
         Parameters:
             name - unique or well-known objects name
             bus - bus object;
                   new SessionBus() object will be created if value is None.
+            private - private connection (uses only if bus is None)
 
         below described attributes will be created:
             bus - Bus object from the functions argument or SessionBus()
@@ -98,7 +99,7 @@ class Base(object):
             set - function to set property's value
         """
         if not bus:
-            bus = dbus.SessionBus()
+            bus = dbus.SessionBus(private=private)
         self.bus = bus
         self.name = name
         self.proxy = bus.get_object(name, self.OBJ_PATH)
