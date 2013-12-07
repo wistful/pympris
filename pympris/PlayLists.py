@@ -20,8 +20,8 @@ for uri, name, icon_uri in items:
     print uri, name, icon_uri
 """
 
-from common import convert2dbus
-from Base import Base
+from .common import convert2dbus
+from .Base import Base
 
 
 class PlaylistOrdering(object):

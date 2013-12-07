@@ -18,7 +18,7 @@ to avoid returning or raising dbus types and exceptions.
 from functools import partial, wraps
 import types
 import dbus
-from common import convert, converter, exception_wrapper
+from .common import convert, converter, exception_wrapper
 
 IPROPERTIES = "org.freedesktop.DBus.Properties"
 

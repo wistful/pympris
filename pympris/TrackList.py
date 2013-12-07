@@ -17,8 +17,8 @@ tl.RemoveTrack(tl.Tracks[2])
 
 """
 
-from common import convert2dbus
-from Base import Base
+from .common import convert2dbus
+from .Base import Base
 
 
 class TrackList(Base):

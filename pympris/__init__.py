@@ -1,9 +1,9 @@
-from MediaPlayer import MediaPlayer
-from PlayLists import PlayLists, PlaylistOrdering
-from Player import Player
-from Root import Root
-from TrackList import TrackList
-from common import available_players, PyMPRISException
+from .MediaPlayer import MediaPlayer
+from .PlayLists import PlayLists, PlaylistOrdering
+from .Player import Player
+from .Root import Root
+from .TrackList import TrackList
+from .common import available_players, PyMPRISException
 
 __version__ = '1.2'
 __description__ = 'Library to control media players using MPRIS2 interfaces'

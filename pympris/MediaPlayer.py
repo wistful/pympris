@@ -27,10 +27,10 @@ if mp.root.CanQuit:
     mp.root.Quit()
 """
 
-from Root import Root
-from Player import Player
-from PlayLists import PlayLists
-from TrackList import TrackList
+from .Root import Root
+from .Player import Player
+from .PlayLists import PlayLists
+from .TrackList import TrackList
 
 
 class MediaPlayer(object):

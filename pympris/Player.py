@@ -25,8 +25,8 @@ if player.CanSeek:
 
 """
 
-from common import convert2dbus
-from Base import Base
+from .common import convert2dbus
+from .Base import Base
 
 
 class Player(Base):

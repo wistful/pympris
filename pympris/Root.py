@@ -22,7 +22,7 @@ if root.CanQuit:
     root.Quit
 """
 
-from Base import Base
+from .Base import Base
 
 
 class Root(Base):
