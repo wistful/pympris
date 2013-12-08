@@ -68,7 +68,7 @@ else:
                 dbus.String) if isinstance(dbus_obj, obj_type)]:
             return str(dbus_obj)
         if isinstance(dbus_obj, dbus.Array):
-            return list(convert, dbus_obj)
+            return list(map(convert, dbus_obj))
         if isinstance(dbus_obj, dbus.Dictionary):
             return {convert(key): convert(value)
                     for key, value in dbus_obj.items()}
