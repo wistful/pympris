@@ -1,4 +1,5 @@
-import gobject
+from __future__ import print_function
+from gi.repository import GObject
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 
@@ -16,7 +17,7 @@ mp = pympris.MediaPlayer(players_ids[1], bus)
 # mp.track_list implements org.mpris.MediaPlayer2.TrackList
 # mp.playlists implements org.mpris.MediaPlayer2.Playlists
 
-print mp.root.Identity
+print(mp.root.Identity)
 
 if mp.root.CanRaise:
     mp.root.Raise()
@@ -31,7 +32,7 @@ if mp.player.CanGoNext:
 
 tracks = mp.track_list.Tracks
 for track_id in tracks:
-    print track_id
+    print(track_id)
 
 if len(tracks) > 1:
     mp.track_list.RemoveTrack(tracks[-1])
@@ -51,23 +52,23 @@ def seeked(x):
 
 
 def PlaylistChanged(arg):
-    print "PlaylistChanged", arg
+    print("PlaylistChanged", arg)
 
 
 def TrackMetadataChanged(track_id, metadata):
-    print "TrackMetadataChanged", track_id, metadata
+    print("TrackMetadataChanged", track_id, metadata)
 
 
 def TrackListReplaced(tracks, current_track):
-    print "TrackListReplaced", tracks, current_track
+    print("TrackListReplaced", tracks, current_track)
 
 
 def TrackAdded(metadata, after_track):
-    print "TrackAdded", metadata, after_track
+    print("TrackAdded", metadata, after_track)
 
 
 def TrackRemoved(track_id):
-    print "TrackRemoved", track_id
+    print("TrackRemoved", track_id)
 
 
 mp.player.register_signal_handler('Seeked', seeked)
@@ -78,5 +79,5 @@ mp.track_list.register_signal_handler('TrackListReplaced', TrackListReplaced)
 mp.track_list.register_signal_handler('TrackAdded', TrackAdded)
 mp.track_list.register_signal_handler('TrackRemoved', TrackRemoved)
 
-loop = gobject.MainLoop()
+loop = GObject.MainLoop()
 loop.run()
