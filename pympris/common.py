@@ -17,9 +17,11 @@ This module provides helper functions:
 """
 
 import sys
-from functools import wraps
+from functools import wraps, partial
+from collections import namedtuple
 import dbus
 
+PY3 = (sys.version_info[0] == 3)
 MPRIS_NAME_PREFIX = "org.mpris.MediaPlayer2"
 
 
@@ -27,54 +29,47 @@ def convert2dbus(value, signature):
     """Convert Python type to dbus type according signature"""
     if len(signature) == 2 and signature.startswith('a'):
         return dbus.Array(value, signature=signature[-1])
+    dbus_string_type = dbus.String if PY3 else dbus.UTF8String
     type_map = {
         'b': dbus.Boolean, 'y': dbus.Byte, 'n': dbus.Int16,
         'i': dbus.Int32, 'x': dbus.Int64, 'q': dbus.UInt16, 'u': dbus.UInt32,
         't': dbus.UInt64, 'd': dbus.Double, 'o': dbus.ObjectPath,
-        'g': dbus.Signature, 's': dbus.UTF8String}
+        'g': dbus.Signature, 's': dbus_string_type}
     return type_map[signature](value)
 
-if sys.version_info[0] == 2:
-    def convert(dbus_obj):
-        if isinstance(dbus_obj, dbus.Boolean):
-            return bool(dbus_obj)
-        if filter(lambda obj_type: isinstance(dbus_obj, obj_type),
-                  (dbus.Byte, dbus.Int16, dbus.Int32, dbus.Int64,
-                   dbus.UInt16, dbus.UInt32, dbus.UInt64)):
-            return int(dbus_obj)
-        if isinstance(dbus_obj, dbus.Double):
-            return float(dbus_obj)
-        if filter(lambda obj_type: isinstance(dbus_obj, obj_type),
-                 (dbus.ObjectPath, dbus.Signature, dbus.String, dbus.UTF8String)):
-            return unicode(dbus_obj)
-        if isinstance(dbus_obj, dbus.Array):
-            return map(convert, dbus_obj)
-        if isinstance(dbus_obj, dbus.Dictionary):
-            return {convert(key): convert(value)
-                    for key, value in dbus_obj.items()}
-        if isinstance(dbus_obj, dbus.Struct):
-            return tuple(map(convert, dbus_obj))
+
+def convert(dbus_obj):
+    """Convert dbus_obj from dbus type to python type"""
+    _isinstance = partial(isinstance, dbus_obj)
+    ConvertType = namedtuple('ConvertType', 'pytype dbustypes')
+
+    pyint = ConvertType(int, (dbus.Byte, dbus.Int16, dbus.Int32, dbus.Int64,
+                              dbus.UInt16, dbus.UInt32, dbus.UInt64))
+    pybool = ConvertType(bool, (dbus.Boolean, ))
+    pyfloat = ConvertType(float, (dbus.Double, ))
+    pylist = ConvertType(lambda _obj: list(map(convert, dbus_obj)),
+                         (dbus.Array, ))
+    pytuple = ConvertType(lambda _obj: tuple(map(convert, dbus_obj)),
+                          (dbus.Struct, ))
+    types_str = (dbus.ObjectPath, dbus.Signature, dbus.String)
+    if not PY3:
+        types_str += (dbus.UTF8String,)
+    pystr = ConvertType(str if PY3 else unicode, types_str)
+
+    pydict = ConvertType(
+        lambda _obj: dict(zip(map(convert, dbus_obj.keys()),
+                              map(convert, dbus_obj.values())
+                              )
+                          ),
+        (dbus.Dictionary, )
+    )
+
+    for conv in (pyint, pybool, pyfloat, pylist, pytuple, pystr, pydict):
+        if any(map(_isinstance, conv.dbustypes)):
+            return conv.pytype(dbus_obj)
+    else:
         return dbus_obj
-else:
-    def convert(dbus_obj):
-        if isinstance(dbus_obj, dbus.Boolean):
-            return bool(dbus_obj)
-        if [obj_type for obj_type in (dbus.Byte, dbus.Int16, dbus.Int32, dbus.Int64,
-                dbus.UInt16, dbus.UInt32, dbus.UInt64) if isinstance(dbus_obj, obj_type)]:
-            return int(dbus_obj)
-        if isinstance(dbus_obj, dbus.Double):
-            return float(dbus_obj)
-        if [obj_type for obj_type in (dbus.ObjectPath, dbus.Signature,
-                dbus.String) if isinstance(dbus_obj, obj_type)]:
-            return str(dbus_obj)
-        if isinstance(dbus_obj, dbus.Array):
-            return list(map(convert, dbus_obj))
-        if isinstance(dbus_obj, dbus.Dictionary):
-            return {convert(key): convert(value)
-                    for key, value in dbus_obj.items()}
-        if isinstance(dbus_obj, dbus.Struct):
-            return tuple(map(convert, dbus_obj))
-        return dbus_obj
+
 
 def converter(f):
     """Decorator to convert from dbus type to Python type"""
@@ -101,13 +96,16 @@ def available_players():
     which implemented MPRIS2 interfaces."""
     bus = dbus.SessionBus()
     players = set()
-    for name in [item for item in bus.list_names() if item.startswith(MPRIS_NAME_PREFIX)]:
+    for name in filter(lambda item: item.startswith(MPRIS_NAME_PREFIX),
+                       bus.list_names()):
         owner_name = bus.get_name_owner(name)
         players.add(convert(owner_name))
     return players
 
 
 class PyMPRISException(Exception):
+
     """docstring for PyMPRISException"""
+
     def __init__(self, *args):
         super(PyMPRISException, self).__init__(*args)
