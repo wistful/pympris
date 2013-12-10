@@ -1,5 +1,0 @@
-build/
-dist/
-pympris.egg-info/
-pympris/*.pyc
-pympris/__pycache__/
