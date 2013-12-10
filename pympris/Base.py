@@ -18,7 +18,7 @@ to avoid returning or raising dbus types and exceptions.
 from functools import partial, wraps
 import types
 import dbus
-from common import convert, converter, exception_wrapper
+from .common import convert, converter, exception_wrapper
 
 IPROPERTIES = "org.freedesktop.DBus.Properties"
 
@@ -72,13 +72,13 @@ class ConverterMeta(type):
 class BaseMeta(ExceptionMeta, ConverterMeta):
     pass
 
+BaseVersionFix = BaseMeta('BaseVersionFix', (object,), {})
 
-class Base(object):
+class Base(BaseVersionFix):
 
     """Base class provides common functionality
     for other classes which implement MPRIS2 interfaces"""
 
-    __metaclass__ = BaseMeta
     OBJ_PATH = "/org/mpris/MediaPlayer2"
 
     def __init__(self, name, bus=None, private=False):
