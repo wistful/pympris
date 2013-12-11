@@ -5,7 +5,7 @@ from .Root import Root
 from .TrackList import TrackList
 from .common import available_players, PyMPRISException
 
-__version__ = '1.3'
+__version__ = '1.4'
 __description__ = 'Library to control media players using MPRIS2 interfaces'
 requires = [
     # pympris depends on dbus-python,
