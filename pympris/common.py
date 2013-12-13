@@ -5,15 +5,7 @@
 # See LICENSE for details.
 
 """
-This module provides helper functions:
-
-`convert2dbus` - converts from Python type to DBUS type according signature
-`convert` - function to convert dbus object to python object.
-`converter` - decorator to convert dbus object to python object.
-`exception_wrapper` - decorator to convert dbus exception to pympris exception.
-`available_players` - function searchs and returns unique names of objects
-                      which implemented MPRIS2 interfaces.
-
+This module provides helper functions.
 """
 
 import sys
