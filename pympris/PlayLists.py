@@ -11,13 +11,15 @@ http://specifications.freedesktop.org/mpris-spec/latest/Playlists_Interface.html
 
 class PlaylistOrdering uses as an enum for Ordering type.
 
-pl = PlayLists('org.mpris.MediaPlayer2.rhythmbox')
-print pl.PlaylistCount
-print pl.ActivePlaylist
+Usage::
 
-items = pl.GetPlaylists(0, 100, PlaylistOrdering.Alphabetical, reversed=False)
-for uri, name, icon_uri in items:
-    print uri, name, icon_uri
+    pl = PlayLists('org.mpris.MediaPlayer2.rhythmbox')
+    print pl.PlaylistCount
+    print pl.ActivePlaylist
+
+    items = pl.GetPlaylists(0, 100, PlaylistOrdering.Alphabetical, reversed=False)
+    for uri, name, icon_uri in items:
+        print uri, name, icon_uri
 """
 
 from .common import convert2dbus
@@ -52,12 +54,12 @@ class PlayLists(Base):
 
     def GetPlaylists(self, start, max_count, order, reversed):
         """Gets a set of playlists.
-        Parameters:
-            start - The index of the first playlist to be fetched
+
+        :param start: The index of the first playlist to be fetched
                     (according to the ordering).
-            max_count - The maximum number of playlists to fetch.
-            order - The ordering that should be used.
-            reversed - Whether the order should be reversed.
+        :param max_count: The maximum number of playlists to fetch.
+        :param order: The ordering that should be used.
+        :param reversed: Whether the order should be reversed.
 
         """
         cv = convert2dbus

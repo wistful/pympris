@@ -9,17 +9,17 @@ This module provides a `Root` class
 wich implemented MPRIS2 Root interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Media_Player.html
 
-Usage:
+Usage::
 
-root = Root('org.mpris.MediaPlayer2.vlc')
-print root.Identity
-if root.CanRaise:
-    root.Raise()
-print "Supported Mime Types: ", root.SupportedMimeTypes
-print "Supported Uri Schemes: ", root.SupportedUriSchemes
+        root = Root('org.mpris.MediaPlayer2.vlc')
+        print root.Identity
+        if root.CanRaise:
+            root.Raise()
+        print "Supported Mime Types: ", root.SupportedMimeTypes
+        print "Supported Uri Schemes: ", root.SupportedUriSchemes
 
-if root.CanQuit:
-    root.Quit
+        if root.CanQuit:
+            root.Quit
 """
 
 from .Base import Base
@@ -131,9 +131,10 @@ class Root(Base):
         """The basename of an installed .desktop file which complies
         with the Desktop entry specification,
         with the ".desktop" extension stripped.
+
         Example:
-            The desktop entry file is "/usr/share/applications/vlc.desktop",
-            and this property contains "vlc"
+        The desktop entry file is "/usr/share/applications/vlc.desktop",
+        and this property contains "vlc"
         """
         return self.get('DesktopEntry')
 
@@ -151,6 +152,6 @@ class Root(Base):
     def SupportedMimeTypes(self):
         """The mime-types supported by the media player.
         Mime-types should be in the standard format
-            (eg: audio/mpeg or application/ogg).
+        (eg: audio/mpeg or application/ogg).
         """
         return self.get('SupportedMimeTypes')

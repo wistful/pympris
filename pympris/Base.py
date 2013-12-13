@@ -83,30 +83,34 @@ class Base(BaseVersionFix):
 
     def __init__(self, name, bus=None, private=False):
         """Init inner attributes to work with dbus.
-        Parameters:
-            name - unique or well-known objects name
-            bus - bus object;
-                  new SessionBus() object will be created if value is None.
-            private - private connection (uses only if bus is None)
 
-        below described attributes will be created:
-            bus - Bus object from the functions argument or SessionBus()
-            name - objects name from the functions argument
-            proxy - DBUS proxy object
-            iface - DBUS interface (uses self.IFACE path to create it)
-            properties - DBUS interface to work with object's properties
-            get - function to receive property's value
-            set - function to set property's value
+        :param name: unique or well-known objects name
+        :param bus: bus object;
+                  new SessionBus() object will be created if value is None.
+        :param private: private connection (uses only if bus is None)
         """
         if not bus:
             bus = dbus.SessionBus(private=private)
         self.bus = bus
+        """Bus object from the functions argument or SessionBus()"""
+
         self.name = name
+        """objects name from the functions argument"""
+
         self.proxy = bus.get_object(name, self.OBJ_PATH)
+        """DBUS proxy object"""
+
         self.iface = dbus.Interface(self.proxy, self.IFACE)
+        """DBUS interface (uses self.IFACE path to create it)"""
+
         self.properties = dbus.Interface(self.proxy, IPROPERTIES)
+        """DBUS interface to work with object's properties"""
+
         self.get = partial(self.properties.Get, self.IFACE)
+        """function to receive property's value"""
+
         self.set = partial(self.properties.Set, self.IFACE)
+        """function to set property's value"""
 
     def register_signal_handler(self, signal_name, handler_function):
         """register `handler_function` to receive `signal_name`.

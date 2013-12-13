@@ -9,19 +9,19 @@ This module provides a `Player` class
 wich implemented MPRIS2 Player interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html
 
-Usage:
+Usage::
 
-player = Player('org.mpris.MediaPlayer2.vlc')
-if player.CanPause:
-    player.PlayPause()
+    player = Player('org.mpris.MediaPlayer2.vlc')
+    if player.CanPause:
+        player.PlayPause()
 
-player.Volume = player.Volume*2
-player.Play()
-if player.CanGoNext:
-    player.Next()
+    player.Volume = player.Volume*2
+    player.Play()
+    if player.CanGoNext:
+        player.Next()
 
-if player.CanSeek:
-    player.Seek = 15000000
+    if player.CanSeek:
+        player.Seek = 15000000
 
 """
 
@@ -68,17 +68,17 @@ class Player(Base):
 
     def Seek(self, offset):
         """Seeks forward in the current track
-        Parameters
-            Offset — The number of microseconds to seek forward.
-        A negative value seeks back.
+
+        :param offset: The number of microseconds to seek forward.
+                        A negative value seeks back.
         """
         self.iface.Seek(convert2dbus(offset, 'x'))
 
     def SetPosition(self, track_id, position):
         """Sets the current track position in microseconds.
-        Parameters
-            track_id - The currently playing track's identifier.
-            position — Track position in microseconds.
+
+        :param track_id: The currently playing track's identifier.
+        :param position: Track position in microseconds.
                 This must be between 0 and <track_length>.
 
         If the Position argument is less than 0, do nothing.
@@ -90,8 +90,9 @@ class Player(Base):
 
     def OpenUri(self, uri):
         """Opens the Uri given as an argument
-        Parameters
-            uri - Uri of the track to load.
+
+        :param uri: Uri of the track to load.
+
         Its uri scheme should be an element
         of the org.mpris.MediaPlayer2.SupportedUriSchemes property
         and the mime-type should match one of the elements
@@ -113,12 +114,12 @@ class Player(Base):
     @property
     def LoopStatus(self):
         """The current loop / repeat status
-        May be:
-            "None" if the playback will stop
-                   when there are no more tracks to play
-            "Track" if the current track will start again from
-                    the begining once it has finished playing
-            "Playlist" if the playback loops through a list of tracks
+
+        :returns: - "None" if the playback will stop
+                      when there are no more tracks to play
+                  - "Track" if the current track will start again from
+                      the begining once it has finished playing
+                  - "Playlist" if the playback loops through a list of tracks
         """
         return self.get('LoopStatus')
 
