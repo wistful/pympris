@@ -25,7 +25,7 @@ if mp.root.CanRaise:
 if mp.player.CanPlay and mp.player.CanPause:
     mp.player.PlayPause()
 
-mp.player.Volume = mp.player.Volume*2
+mp.player.Volume = mp.player.Volume * 2
 
 if mp.player.CanGoNext:
     mp.player.Next()

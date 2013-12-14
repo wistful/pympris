@@ -34,6 +34,7 @@ def signal_wrapper(f):
 
 
 class ExceptionMeta(type):
+
     """Metaclass wraps all class' functions and properties
     in `exception_wrapper` decorator to avoid raising dbus exceptions
     """
@@ -52,6 +53,7 @@ class ExceptionMeta(type):
 
 
 class ConverterMeta(type):
+
     """Metaclass wraps all class' functions and properties
     in `converter` decorator to avoid returning dbus types
     """
