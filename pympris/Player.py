@@ -116,9 +116,9 @@ class Player(Base):
         """The current loop / repeat status
 
         :returns: - "None" if the playback will stop
-                      when there are no more tracks to play
+                    when there are no more tracks to play
                   - "Track" if the current track will start again from
-                      the begining once it has finished playing
+                    the begining once it has finished playing
                   - "Playlist" if the playback loops through a list of tracks
         """
         return self.get('LoopStatus')

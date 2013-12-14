@@ -74,6 +74,7 @@ class BaseMeta(ExceptionMeta, ConverterMeta):
 
 BaseVersionFix = BaseMeta('BaseVersionFix', (object,), {})
 
+
 class Base(BaseVersionFix):
 
     """Base class provides common functionality
@@ -116,7 +117,7 @@ class Base(BaseVersionFix):
         """register `handler_function` to receive `signal_name`.
 
         Uses class's dbus interface self.IFACE, objects name self.name
-            and objects path self.OBJ_PATH to match signal.
+        and objects path self.OBJ_PATH to match signal.
         """
         self.bus.add_signal_receiver(signal_wrapper(handler_function),
                                      signal_name=signal_name,

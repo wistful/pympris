@@ -72,7 +72,7 @@ class TrackList(Base):
     def Tracks(self):
         """
         :returns: A list which contains the identifier of each track
-        in the tracklist, in order.
+                  in the tracklist, in order.
         """
         return self.get('Tracks')
 
