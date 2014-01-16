@@ -1,3 +1,5 @@
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/wistful/pympris/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 # pympris #
 This is a Python wrapper around the MPRIS2 interfaces of media players.
 
