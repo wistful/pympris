@@ -127,14 +127,16 @@ class Base(BaseVersionFix):
                                      bus_name=self.name,
                                      path=self.OBJ_PATH)
 
-    def register_properties_signal_handler(self, signal_name, handler_function):
+    def register_properties_handler(self, handler_function):
         """register `handler_function` to receive `signal_name`.
 
         Uses class's dbus interface self.IFACE, objects name self.name
         and objects path self.OBJ_PATH to match signal.
+
+        :param handler_function: A function which is called when the signal is catched.
         """
         self.bus.add_signal_receiver(signal_wrapper(handler_function),
-                                     signal_name=signal_name,
+                                     signal_name='PropertiesChanged',
                                      dbus_interface=IPROPERTIES,
                                      bus_name=self.name,
                                      path=self.OBJ_PATH)
