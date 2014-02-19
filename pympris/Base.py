@@ -33,6 +33,16 @@ def signal_wrapper(f):
     return wrapper
 
 
+def filter_properties_signals(f, signal_iface_name):
+    """Filter signals by iface name."""
+    @wraps(f)
+    def wrapper(iface, changed_props, invalidated_props, *args, **kwargs):
+        if iface == signal_iface_name:
+            f(changed_props, invalidated_props)
+
+    return wrapper
+
+
 class ExceptionMeta(type):
 
     """Metaclass wraps all class' functions and properties
@@ -130,12 +140,15 @@ class Base(BaseVersionFix):
     def register_properties_handler(self, handler_function):
         """register `handler_function` to receive `signal_name`.
 
-        Uses class's dbus interface self.IFACE, objects name self.name
-        and objects path self.OBJ_PATH to match signal.
+        Uses dbus interface IPROPERTIES and objects path self.OBJ_PATH
+        to match signal.
 
-        :param handler_function: A function which is called when the signal is catched.
+        :param handler_function: the function to be called.
         """
-        self.bus.add_signal_receiver(signal_wrapper(handler_function),
+
+        handler = filter_properties_signals(
+            signal_wrapper(handler_function), self.IFACE)
+        self.bus.add_signal_receiver(handler,
                                      signal_name='PropertiesChanged',
                                      dbus_interface=IPROPERTIES,
                                      bus_name=self.name,
