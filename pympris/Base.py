@@ -14,71 +14,16 @@ to convert function's arguments from dbus type to python type.
 `BaseMeta` metaclass (inherited ExceptionMeta and ConverterMeta classes)
 to avoid returning or raising dbus types and exceptions.
 """
+from functools import partial
 
-from functools import partial, wraps
-import types
 import dbus
-from .common import convert, converter, exception_wrapper
+
+from .common import (
+    signal_wrapper, filter_properties_signals,
+    ExceptionMeta, ConverterMeta,
+)
 
 IPROPERTIES = "org.freedesktop.DBus.Properties"
-
-
-def signal_wrapper(f):
-    """Decorator converts function's arguments from dbus types to python."""
-    @wraps(f)
-    def wrapper(*args, **kwds):
-        args = map(convert, args)
-        kwds = {convert(k): convert(v) for k, v in kwds.items()}
-        return f(*args, **kwds)
-    return wrapper
-
-
-def filter_properties_signals(f, signal_iface_name):
-    """Filter signals by iface name."""
-    @wraps(f)
-    def wrapper(iface, changed_props, invalidated_props, *args, **kwargs):
-        if iface == signal_iface_name:
-            f(changed_props, invalidated_props)
-
-    return wrapper
-
-
-class ExceptionMeta(type):
-
-    """Metaclass wraps all class' functions and properties
-    in `exception_wrapper` decorator to avoid raising dbus exceptions
-    """
-    def __new__(cls, name, parents, dct):
-        fn = exception_wrapper
-        for attr_name in dct:
-            if isinstance(dct[attr_name], types.FunctionType):
-                dct[attr_name] = fn(dct[attr_name])
-            elif isinstance(dct[attr_name], property) and dct[attr_name].fget:
-                dct[attr_name] = property(
-                    fn(dct[attr_name].fget) if dct[attr_name].fget else None,
-                    fn(dct[attr_name].fset) if dct[attr_name].fset else None,
-                    fn(dct[attr_name].fdel) if dct[attr_name].fdel else None)
-
-        return super(ExceptionMeta, cls).__new__(cls, name, parents, dct)
-
-
-class ConverterMeta(type):
-
-    """Metaclass wraps all class' functions and properties
-    in `converter` decorator to avoid returning dbus types
-    """
-
-    def __new__(cls, name, parents, dct):
-        for attr_name in dct:
-            if isinstance(dct[attr_name], types.FunctionType):
-                dct[attr_name] = converter(dct[attr_name])
-            elif isinstance(dct[attr_name], property) and dct[attr_name].fget:
-                dct[attr_name] = property(converter(dct[attr_name].fget),
-                                          dct[attr_name].fset,
-                                          dct[attr_name].fdel
-                                          )
-
-        return super(ConverterMeta, cls).__new__(cls, name, parents, dct)
 
 
 class BaseMeta(ExceptionMeta, ConverterMeta):
@@ -148,6 +93,7 @@ class Base(BaseVersionFix):
 
         handler = filter_properties_signals(
             signal_wrapper(handler_function), self.IFACE)
+
         self.bus.add_signal_receiver(handler,
                                      signal_name='PropertiesChanged',
                                      dbus_interface=IPROPERTIES,
