@@ -8,12 +8,9 @@
 This module provides a `Base` class used as a base class
 for implementing MPRIS2 interfaces.
 
-Decorator 'signal_wrapper' used by `Base` class
-to convert function's arguments from dbus type to python type.
-
-`BaseMeta` metaclass (inherited ExceptionMeta and ConverterMeta classes)
-to avoid returning or raising dbus types and exceptions.
+`BaseMeta` metaclass uses to avoid returning dbus types and exceptions.
 """
+
 from functools import partial
 
 import dbus
