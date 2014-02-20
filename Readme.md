@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/wistful/pympris.png?branch=master)](https://travis-ci.org/wistful/pympris)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/wistful/pympris/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 # pympris #
