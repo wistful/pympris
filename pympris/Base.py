@@ -7,8 +7,6 @@
 """
 This module provides a `Base` class used as a base class
 for implementing MPRIS2 interfaces.
-
-`BaseMeta` metaclass uses to avoid returning dbus types and exceptions.
 """
 
 from functools import partial
@@ -20,18 +18,23 @@ from .common import (
     ExceptionMeta, ConverterMeta,
 )
 
+__all__ = ('Base', )
+
 IPROPERTIES = "org.freedesktop.DBus.Properties"
 
 
 class BaseMeta(ExceptionMeta, ConverterMeta):
-    pass
+    """
+    `BaseMeta` metaclass uses to avoid returning dbus types and exceptions.
+    """
 
 BaseVersionFix = BaseMeta('BaseVersionFix', (object,), {})
+"""`BaseVersionFix` class uses to support both python2 and python3 versions."""
 
 
 class Base(BaseVersionFix):
 
-    """Base class provides common functionality
+    """`Base` class provides common functionality
     for other classes which implement MPRIS2 interfaces"""
 
     OBJ_PATH = "/org/mpris/MediaPlayer2"
@@ -41,8 +44,9 @@ class Base(BaseVersionFix):
 
         :param name: unique or well-known objects name
         :param bus: bus object;
-                  new SessionBus() object will be created if value is None.
-        :param private: private connection (uses only if bus is None)
+                    new SessionBus() object will be created if value is None.
+        :param private: if True, create bus object using private connection
+                        (uses only if bus is None).
         """
         if not bus:
             bus = dbus.SessionBus(private=private)
@@ -72,6 +76,9 @@ class Base(BaseVersionFix):
 
         Uses class's dbus interface self.IFACE, objects name self.name
         and objects path self.OBJ_PATH to match signal.
+
+        :param signal_name: The signal name; None (default) matches all names.
+        :param handler_function: The function to be called.
         """
         self.bus.add_signal_receiver(signal_wrapper(handler_function),
                                      signal_name=signal_name,
@@ -83,9 +90,9 @@ class Base(BaseVersionFix):
         """register `handler_function` to receive `signal_name`.
 
         Uses dbus interface IPROPERTIES and objects path self.OBJ_PATH
-        to match signal.
+        to match 'PropertiesChanged' signal.
 
-        :param handler_function: the function to be called.
+        :param handler_function: The function to be called.
         """
 
         handler = filter_properties_signals(
