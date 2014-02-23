@@ -9,7 +9,6 @@ Module provides a `Root` class wich implements MPRIS2 Root interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Media_Player.html
 
 Usage::
-        from pympris import Root
 
         root = Root('org.mpris.MediaPlayer2.vlc')
         print(root.Identity)  # VLC media player
