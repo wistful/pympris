@@ -5,17 +5,18 @@
 # See LICENSE for details.
 
 """
-This module provides a `Player` class
-wich implemented MPRIS2 Player interface:
+Module provides a `Player` class wich implemented MPRIS2 Player interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html
 
 Usage::
+
+    from pympris import Player
 
     player = Player('org.mpris.MediaPlayer2.vlc')
     if player.CanPause:
         player.PlayPause()
 
-    player.Volume = player.Volume*2
+    player.Volume = player.Volume * 2
     player.Play()
     if player.CanGoNext:
         player.Next()
@@ -28,16 +29,17 @@ Usage::
 from .common import convert2dbus
 from .Base import Base
 
+__all__ = ('Player', )
+
 
 class Player(Base):
 
-    """class implements methods and properties
-    to working with MPRIS2 Player interface
+    """Class implements methods and properties
+    to work with MPRIS2 Player interface.
     """
 
-    # __metaclass__ = ConverterMeta
-
     IFACE = "org.mpris.MediaPlayer2.Player"
+    """The D-Bus MediaPlayer2.Player interface name"""
 
     def __init__(self, name, bus=None, private=False):
         super(Player, self).__init__(name, bus, private)
@@ -69,17 +71,17 @@ class Player(Base):
     def Seek(self, offset):
         """Seeks forward in the current track
 
-        :param offset: The number of microseconds to seek forward.
-                        A negative value seeks back.
+        :param int offset: The number of microseconds to seek forward.
+                           A negative value seeks back.
         """
         self.iface.Seek(convert2dbus(offset, 'x'))
 
     def SetPosition(self, track_id, position):
         """Sets the current track position in microseconds.
 
-        :param track_id: The currently playing track's identifier.
-        :param position: Track position in microseconds.
-                This must be between 0 and <track_length>.
+        :param str track_id: The currently playing track's identifier.
+        :param int position: Track position in microseconds.
+                             This must be between 0 and <track_length>.
 
         If the Position argument is less than 0, do nothing.
         If the Position argument is greater than the track length, do nothing.
@@ -91,7 +93,7 @@ class Player(Base):
     def OpenUri(self, uri):
         """Opens the Uri given as an argument
 
-        :param uri: Uri of the track to load.
+        :param str uri: Uri of the track to load.
 
         Its uri scheme should be an element
         of the org.mpris.MediaPlayer2.SupportedUriSchemes property
@@ -115,17 +117,22 @@ class Player(Base):
     def LoopStatus(self):
         """The current loop / repeat status
 
-        :returns: - "None" if the playback will stop
-                    when there are no more tracks to play
-                  - "Track" if the current track will start again from
-                    the begining once it has finished playing
-                  - "Playlist" if the playback loops through a list of tracks
+        :getter: Returns loop status
+        :setter: Sets loop status
+        :type: str
+        May be: - "None" if the playback will stop
+                   when there are no more tracks to play
+                - "Track" if the current track will start again from
+                   the begining once it has finished playing
+                - "Playlist" if the playback loops through a list of tracks
         """
         return self.get('LoopStatus')
 
     @LoopStatus.setter
     def LoopStatus(self, status):
         """The current loop / repeat status
+
+        :param str status: loop status
         May be:
             "None" if the playback will stop
                    when there are no more tracks to play
@@ -137,7 +144,12 @@ class Player(Base):
 
     @property
     def Rate(self):
-        """The current playback rate."""
+        """The current playback rate.
+
+        :getter: Returns current playback rate.
+        :setter: Sets playback rate.
+        :type: float
+        """
         return self.get('Rate')
 
     @Rate.setter
@@ -150,6 +162,10 @@ class Player(Base):
         """A value of false indicates that playback
         is progressing linearly through a playlist, while true means playback
         is progressing through a playlist in some other order.
+
+        :getter: Returns a value of false indicates that playback.
+        :setter: Sets a value of false indicates that playback.
+        :type: bool
         """
         return self.get('Shuffle')
 
@@ -168,7 +184,12 @@ class Player(Base):
 
     @property
     def Volume(self):
-        """The volume level"""
+        """The volume level
+
+        :getter: Returns a volume level.
+        :setter: Sets a volume level.
+        :type: float
+        """
         return self.get('Volume')
 
     @Volume.setter

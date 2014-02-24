@@ -4,6 +4,11 @@
 # pympris #
 This is a Python wrapper around the MPRIS2 interfaces of media players.
 
+See [the full docs](http://pympris.readthedocs.org/en/latest/) for more information.
+
+Please use [github tracker](https://github.com/wistful/pympris/issues)
+to report issues.
+
 ## Requires ##
 
 [dbus-python>=1.0](http://dbus.freedesktop.org/releases/dbus-python/).
@@ -58,14 +63,14 @@ mp = pympris.MediaPlayer(players_ids[1], bus)
 print(mp.root.Identity)
 ```
 
-Playing with org.mpris.MediaPlayer2 interface
+Use org.mpris.MediaPlayer2 interface
 ```python
 if mp.root.CanRaise:
     mp.root.Raise()
 mp.root.Fullscreen = True
 ```
 
-Playing with org.mpris.MediaPlayer2.Player
+Use org.mpris.MediaPlayer2.Player interface
 ```python
 if mp.player.CanPlay and mp.player.CanPause:
     mp.player.PlayPause()
@@ -76,7 +81,7 @@ if mp.player.CanGoNext:
     mp.player.Next()
 ```
 
-Playing with org.mpris.MediaPlayer2.TrackList
+Use org.mpris.MediaPlayer2.TrackList interface
 ```python
 tracks = mp.track_list.Tracks
 for track_id in tracks:
@@ -87,7 +92,7 @@ if len(tracks) > 1:
     mp.track_list.GoTo(tracks[0])
 ```
 
-Playing with org.mpris.MediaPlayer2.Playlists interface
+Use org.mpris.MediaPlayer2.Playlists interface
 ```python
 n = mp.playlists.PlaylistCount
 ordering = pympris.PlaylistOrdering.LastPlayDate
@@ -98,8 +103,13 @@ mp.playlists.ActivatePlaylist(pl_id)
 
 Setting up signal handlers
 ```python
+def handle_properties_changes(changed_props, invalidated_props):
+    for name, value in changed_props.items():
+        print('Property %s was change value to %s.' % (name, value))
+
+
 def seeked(x):
-    print(x)
+    print("Positin was seeded to %s" % x)
 
 
 def PlaylistChanged(arg):
@@ -122,6 +132,9 @@ def TrackRemoved(track_id):
     print("TrackRemoved", track_id)
 
 
+mp.player.register_properties_handler(handle_properties_changes)
+mp.playlists.register_properties_handler(handle_properties_changes)
+
 mp.player.register_signal_handler('Seeked', seeked)
 mp.playlists.register_signal_handler('PlaylistChanged', PlaylistChanged)
 mp.track_list.register_signal_handler('TrackMetadataChanged',
@@ -133,4 +146,5 @@ mp.track_list.register_signal_handler('TrackRemoved', TrackRemoved)
 
 loop = GObject.MainLoop()
 loop.run()
+
 ```

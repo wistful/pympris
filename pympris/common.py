@@ -5,7 +5,7 @@
 # See LICENSE for details.
 
 """
-This module provides helper functions.
+Module provides helper functions.
 """
 
 import sys
@@ -15,12 +15,20 @@ from functools import wraps, partial
 
 import dbus
 
+__all__ = ('signal_wrapper', 'filter_properties_signals', 'convert2dbus',
+           'ExceptionMeta', 'ConverterMeta', )
+
 PY3 = (sys.version_info[0] == 3)
 MPRIS_NAME_PREFIX = "org.mpris.MediaPlayer2"
 
 
 def convert2dbus(value, signature):
-    """Convert Python type to dbus type according signature"""
+    """Converts `value` type from python to dbus according signature.
+
+    :param value: value to convert to dbus object
+    :param str signature: dbus type signature.
+    :returns: value in dbus type.
+    """
     if len(signature) == 2 and signature.startswith('a'):
         return dbus.Array(value, signature=signature[-1])
     dbus_string_type = dbus.String if PY3 else dbus.UTF8String
@@ -33,7 +41,11 @@ def convert2dbus(value, signature):
 
 
 def convert(dbus_obj):
-    """Convert dbus_obj from dbus type to python type"""
+    """Converts dbus_obj from dbus type to python type.
+
+    :param dbus_obj: dbus object.
+    :returns: dbus_obj in python type.
+    """
     _isinstance = partial(isinstance, dbus_obj)
     ConvertType = namedtuple('ConvertType', 'pytype dbustypes')
 
@@ -66,7 +78,7 @@ def convert(dbus_obj):
 
 
 def converter(f):
-    """Decorator to convert from dbus type to Python type"""
+    """Decorator to convert value from dbus type to python type."""
     @wraps(f)
     def wrapper(*args, **kwds):
         return convert(f(*args, **kwds))
@@ -74,7 +86,7 @@ def converter(f):
 
 
 def exception_wrapper(f):
-    """Decorator to convert dbus exception to pympris exception"""
+    """Decorator to convert dbus exception to pympris exception."""
     @wraps(f)
     def wrapper(*args, **kwds):
         try:
@@ -86,8 +98,12 @@ def exception_wrapper(f):
 
 
 def available_players():
-    """Search and return set of unique names of objects
-    which implemented MPRIS2 interfaces."""
+    """Searchs and returns set of unique names of objects
+    which implements MPRIS2 interfaces.
+
+    :returns: set of unique names.
+    :type: set
+    """
     bus = dbus.SessionBus()
     players = set()
     for name in filter(lambda item: item.startswith(MPRIS_NAME_PREFIX),
@@ -99,7 +115,7 @@ def available_players():
 
 class PyMPRISException(Exception):
 
-    """docstring for PyMPRISException"""
+    """Base exceprion class"""
 
     def __init__(self, *args):
         super(PyMPRISException, self).__init__(*args)
@@ -116,20 +132,25 @@ def signal_wrapper(f):
 
 
 def filter_properties_signals(f, signal_iface_name):
-    """Filter signals by iface name."""
+    """Filters signals by iface name.
+
+    :param function f: function to wrap.
+    :param str signal_iface_name: interface name.
+    """
     @wraps(f)
     def wrapper(iface, changed_props, invalidated_props, *args, **kwargs):
         if iface == signal_iface_name:
-                f(changed_props, invalidated_props)
+            f(changed_props, invalidated_props)
 
     return wrapper
 
 
 class ExceptionMeta(type):
 
-    """Metaclass wraps all class' functions and properties
-    in `exception_wrapper` decorator to avoid raising dbus exceptions
+    """Metaclass to wrap all class methods and properties
+    using `exception_wrapper` decorator to avoid raising dbus exceptions.
     """
+
     def __new__(cls, name, parents, dct):
         fn = exception_wrapper
         for attr_name in dct:
@@ -146,8 +167,8 @@ class ExceptionMeta(type):
 
 class ConverterMeta(type):
 
-    """Metaclass wraps all class' functions and properties
-    in `converter` decorator to avoid returning dbus types
+    """Metaclass to wrap all class methods and properties
+    using `converter` decorator to avoid returning dbus types.
     """
 
     def __new__(cls, name, parents, dct):

@@ -5,36 +5,39 @@
 # See LICENSE for details.
 
 """
-This module provides a `Root` class
-wich implemented MPRIS2 Root interface:
+Module provides a `Root` class wich implements MPRIS2 Root interface:
 http://specifications.freedesktop.org/mpris-spec/latest/Media_Player.html
 
 Usage::
 
-        root = Root('org.mpris.MediaPlayer2.vlc')
-        print root.Identity
-        if root.CanRaise:
-            root.Raise()
-        print "Supported Mime Types: ", root.SupportedMimeTypes
-        print "Supported Uri Schemes: ", root.SupportedUriSchemes
+    from pympris import Root
 
-        if root.CanQuit:
-            root.Quit
+    root = Root('org.mpris.MediaPlayer2.vlc')
+    print(root.Identity)  # VLC media player
+
+    if root.CanRaise:
+        root.Raise()
+
+    print("Supported Mime Types", root.SupportedMimeTypes)
+    print("Supported Uri Schemes", root.SupportedUriSchemes)
+
+    if root.CanQuit:
+        root.Quit()
 """
 
 from .Base import Base
 
+__all__ = ('Root', )
+
 
 class Root(Base):
 
-    """class implements methods and properties
-    to working with MPRIS2 Root interface
+    """Class implements methods and properties
+    to work with MPRIS2 MediaPlayer2 interface.
     """
 
     IFACE = "org.mpris.MediaPlayer2"
-
-    def __init__(self, name, bus=None, private=False):
-        super(Root, self).__init__(name, bus, private)
+    """The D-Bus MediaPlayer2 interface name"""
 
     def Raise(self):
         """Brings the media player's user interface to the front
