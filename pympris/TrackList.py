@@ -10,6 +10,8 @@ http://specifications.freedesktop.org/mpris-spec/latest/Track_List_Interface.htm
 
 Usage::
 
+    from pympris import TrackList
+
     tl = TrackList('org.mpris.MediaPlayer2.vlc')
     print(tl.Tracks)
     tl.RemoveTrack(tl.Tracks[2])

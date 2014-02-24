@@ -23,9 +23,10 @@ MPRIS_NAME_PREFIX = "org.mpris.MediaPlayer2"
 
 
 def convert2dbus(value, signature):
-    """Converts `values` type from python to dbus according signature.
+    """Converts `value` type from python to dbus according signature.
 
-    :param: str signature: dbus type signature.
+    :param value: value to convert to dbus object
+    :param str signature: dbus type signature.
     :returns: value in dbus type.
     """
     if len(signature) == 2 and signature.startswith('a'):
@@ -42,7 +43,7 @@ def convert2dbus(value, signature):
 def convert(dbus_obj):
     """Converts dbus_obj from dbus type to python type.
 
-    :param: dbus_obj: dbus object.
+    :param dbus_obj: dbus object.
     :returns: dbus_obj in python type.
     """
     _isinstance = partial(isinstance, dbus_obj)
@@ -133,22 +134,23 @@ def signal_wrapper(f):
 def filter_properties_signals(f, signal_iface_name):
     """Filters signals by iface name.
 
-    :param f: function to wrap.
-    :param signal_iface_name: interface name.
+    :param function f: function to wrap.
+    :param str signal_iface_name: interface name.
     """
     @wraps(f)
     def wrapper(iface, changed_props, invalidated_props, *args, **kwargs):
         if iface == signal_iface_name:
-                f(changed_props, invalidated_props)
+            f(changed_props, invalidated_props)
 
     return wrapper
 
 
 class ExceptionMeta(type):
 
-    """Metaclass to wrap all class' functions and properties
-    in `exception_wrapper` decorator to avoid raising dbus exceptions.
+    """Metaclass to wrap all class methods and properties
+    using `exception_wrapper` decorator to avoid raising dbus exceptions.
     """
+
     def __new__(cls, name, parents, dct):
         fn = exception_wrapper
         for attr_name in dct:
@@ -165,8 +167,8 @@ class ExceptionMeta(type):
 
 class ConverterMeta(type):
 
-    """Metaclass to wrap all class functions and properties
-    in `converter` decorator to avoid returning dbus types.
+    """Metaclass to wrap all class methods and properties
+    using `converter` decorator to avoid returning dbus types.
     """
 
     def __new__(cls, name, parents, dct):

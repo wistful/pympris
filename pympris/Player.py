@@ -10,6 +10,8 @@ http://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html
 
 Usage::
 
+    from pympris import Player
+
     player = Player('org.mpris.MediaPlayer2.vlc')
     if player.CanPause:
         player.PlayPause()

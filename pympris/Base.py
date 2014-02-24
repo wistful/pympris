@@ -35,7 +35,7 @@ BaseVersionFix = BaseMeta('BaseVersionFix', (object,), {})
 class Base(BaseVersionFix):
 
     """`Base` class provides common functionality
-    for other classes which implement MPRIS2 interfaces"""
+    for other classes which implement MPRIS2 interfaces."""
 
     OBJ_PATH = "/org/mpris/MediaPlayer2"
 
@@ -77,8 +77,9 @@ class Base(BaseVersionFix):
         Uses class's dbus interface self.IFACE, objects name self.name
         and objects path self.OBJ_PATH to match signal.
 
-        :param signal_name: The signal name; None (default) matches all names.
-        :param handler_function: The function to be called.
+        :param str signal_name: The signal name;
+                                None(default) matches all names.
+        :param function handler_function: The function to be called.
         """
         self.bus.add_signal_receiver(signal_wrapper(handler_function),
                                      signal_name=signal_name,
@@ -92,7 +93,7 @@ class Base(BaseVersionFix):
         Uses dbus interface IPROPERTIES and objects path self.OBJ_PATH
         to match 'PropertiesChanged' signal.
 
-        :param handler_function: The function to be called.
+        :param function handler_function: The function to be called.
         """
 
         handler = filter_properties_signals(

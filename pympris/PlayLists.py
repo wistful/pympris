@@ -11,6 +11,7 @@ http://specifications.freedesktop.org/mpris-spec/latest/Playlists_Interface.html
 Class `PlaylistOrdering` uses as an enum for Ordering type.
 
 Usage::
+    from pympris import PlayLists
 
     pl = PlayLists('org.mpris.MediaPlayer2.rhythmbox')
     print(pl.PlaylistCount)

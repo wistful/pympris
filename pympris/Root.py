@@ -10,17 +10,19 @@ http://specifications.freedesktop.org/mpris-spec/latest/Media_Player.html
 
 Usage::
 
-        root = Root('org.mpris.MediaPlayer2.vlc')
-        print(root.Identity)  # VLC media player
+    from pympris import Root
 
-        if root.CanRaise:
-            root.Raise()
+    root = Root('org.mpris.MediaPlayer2.vlc')
+    print(root.Identity)  # VLC media player
 
-        print("Supported Mime Types", root.SupportedMimeTypes)
-        print("Supported Uri Schemes", root.SupportedUriSchemes)
+    if root.CanRaise:
+        root.Raise()
 
-        if root.CanQuit:
-            root.Quit()
+    print("Supported Mime Types", root.SupportedMimeTypes)
+    print("Supported Uri Schemes", root.SupportedUriSchemes)
+
+    if root.CanQuit:
+        root.Quit()
 """
 
 from .Base import Base
@@ -36,9 +38,6 @@ class Root(Base):
 
     IFACE = "org.mpris.MediaPlayer2"
     """The D-Bus MediaPlayer2 interface name"""
-
-    def __init__(self, name, bus=None, private=False):
-        super(Root, self).__init__(name, bus, private)
 
     def Raise(self):
         """Brings the media player's user interface to the front

@@ -20,7 +20,7 @@ Usage::
 
     # get unique ids for all available players
     players_ids = list(pympris.available_players())
-    mp = pympris.MediaPlayer(players_ids[1], bus)
+    mp = pympris.MediaPlayer(players_ids[0], bus)
 
     # mp.root implements org.mpris.MediaPlayer2 interface
     # mp.player implements org.mpris.MediaPlayer2.Player
@@ -36,7 +36,7 @@ Usage::
     if mp.player.CanPlay and mp.player.CanPause:
         mp.player.PlayPause()
 
-    mp.player.Volume = mp.player.Volume*2
+    mp.player.Volume = mp.player.Volume * 2
 
     if mp.player.CanGoNext:
         mp.player.Next()
@@ -58,29 +58,37 @@ Usage::
     # setup signal handlers
 
 
+    def handle_properties_changes(changed_props, invalidated_props):
+        for name, value in changed_props.items():
+            print('Property %s was change value to %s.' % (name, value))
+
+
     def seeked(x):
-        print(x)
+        print("Positin was seeded to %s" % x)
 
 
     def PlaylistChanged(arg):
-        print "PlaylistChanged", arg
+        print("PlaylistChanged", arg)
 
 
     def TrackMetadataChanged(track_id, metadata):
-        print "TrackMetadataChanged", track_id, metadata
+        print("TrackMetadataChanged", track_id, metadata)
 
 
     def TrackListReplaced(tracks, current_track):
-        print "TrackListReplaced", tracks, current_track
+        print("TrackListReplaced", tracks, current_track)
 
 
     def TrackAdded(metadata, after_track):
-        print "TrackAdded", metadata, after_track
+        print("TrackAdded", metadata, after_track)
 
 
     def TrackRemoved(track_id):
         print "TrackRemoved", track_id
 
+
+    mp.player.register_properties_handler(handle_properties_changes)
+    mp.playlists.register_properties_handler(handle_properties_changes)
 
     mp.player.register_signal_handler('Seeked', seeked)
     mp.playlists.register_signal_handler('PlaylistChanged', PlaylistChanged)
