@@ -4,9 +4,9 @@
 # pympris #
 This is a Python wrapper around the MPRIS2 interfaces of media players.
 
-See `the full docs`_ for more information.
+See [the full docs](http://pympris.readthedocs.org/en/latest/) for more information.
 
-Please use `github tracker <https://github.com/wistful/pympris/issues>`_
+Please use [github tracker](https://github.com/wistful/pympris/issues)
 to report issues.
 
 ## Requires ##
