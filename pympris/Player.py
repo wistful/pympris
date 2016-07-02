@@ -41,8 +41,8 @@ class Player(Base):
     IFACE = "org.mpris.MediaPlayer2.Player"
     """The D-Bus MediaPlayer2.Player interface name"""
 
-    def __init__(self, name, bus=None, private=False):
-        super(Player, self).__init__(name, bus, private)
+    def __init__(self, name, bus=None, private=False, obj_path=None):
+        super(Player, self).__init__(name=name, bus=bus, private=private, obj_path=obj_path)
 
     def Next(self):
         """Skips to the next track in the tracklist."""

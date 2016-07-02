@@ -33,8 +33,8 @@ class TrackList(Base):
     IFACE = "org.mpris.MediaPlayer2.TrackList"
     """The D-Bus MediaPlayer2.Player.TrackList interface name"""
 
-    def __init__(self, name, bus=None, private=False):
-        super(TrackList, self).__init__(name, bus, private)
+    def __init__(self, name, bus=None, private=False, obj_path=None):
+        super(TrackList, self).__init__(name=name, bus=bus, private=private, obj_path=obj_path)
 
     def GetTracksMetadata(self, track_ids):
         """Gets all the metadata available for a set of tracks.
