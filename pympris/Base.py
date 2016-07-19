@@ -39,7 +39,7 @@ class Base(BaseVersionFix):
 
     OBJ_PATH = "/org/mpris/MediaPlayer2"
 
-    def __init__(self, name, bus=None, private=False):
+    def __init__(self, name, bus=None, private=False, obj_path=None):
         """Init inner attributes to work with dbus.
 
         :param name: unique or well-known objects name
@@ -56,7 +56,12 @@ class Base(BaseVersionFix):
         self.name = name
         """objects name from the functions argument"""
 
-        self.proxy = bus.get_object(name, self.OBJ_PATH)
+        if not obj_path:
+            self.obj_path = self.OBJ_PATH
+        else:
+            self.obj_path = obj_path
+
+        self.proxy = bus.get_object(name, self.obj_path)
         """DBUS proxy object"""
 
         self.iface = dbus.Interface(self.proxy, self.IFACE)
@@ -75,7 +80,7 @@ class Base(BaseVersionFix):
         """register `handler_function` to receive `signal_name`.
 
         Uses class's dbus interface self.IFACE, objects name self.name
-        and objects path self.OBJ_PATH to match signal.
+        and objects path self.obj_path to match signal.
 
         :param str signal_name: The signal name;
                                 None(default) matches all names.
@@ -85,12 +90,12 @@ class Base(BaseVersionFix):
                                      signal_name=signal_name,
                                      dbus_interface=self.IFACE,
                                      bus_name=self.name,
-                                     path=self.OBJ_PATH)
+                                     path=self.obj_path)
 
     def register_properties_handler(self, handler_function):
         """register `handler_function` to receive `signal_name`.
 
-        Uses dbus interface IPROPERTIES and objects path self.OBJ_PATH
+        Uses dbus interface IPROPERTIES and objects path self.obj_path
         to match 'PropertiesChanged' signal.
 
         :param function handler_function: The function to be called.
@@ -103,4 +108,4 @@ class Base(BaseVersionFix):
                                      signal_name='PropertiesChanged',
                                      dbus_interface=IPROPERTIES,
                                      bus_name=self.name,
-                                     path=self.OBJ_PATH)
+                                     path=self.obj_path)

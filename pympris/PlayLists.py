@@ -45,8 +45,8 @@ class PlayLists(Base):
     IFACE = "org.mpris.MediaPlayer2.Playlists"
     """The D-Bus MediaPlayer2.Playlists interface name"""
 
-    def __init__(self, name, bus=None, private=False):
-        super(PlayLists, self).__init__(name, bus, private)
+    def __init__(self, name, bus=None, private=False, obj_path=None):
+        super(PlayLists, self).__init__(name=name, bus=bus, private=private, obj_path=obj_path)
 
     def ActivatePlaylist(self, playlist_id):
         """Starts playing the given playlist.
